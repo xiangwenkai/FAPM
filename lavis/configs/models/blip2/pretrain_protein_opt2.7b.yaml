@@ -1,0 +1,28 @@
+ # Copyright (c) 2022, salesforce.com, inc.
+ # All rights reserved.
+ # SPDX-License-Identifier: BSD-3-Clause
+ # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+model:
+  arch: pretrain_protein_opt2.7b
+  load_finetuned: False
+
+  pretrained: ""
+  finetuned: ""
+
+  # Q-Former
+  num_query_token: 32
+
+  # OPT
+  opt_model: "facebook/opt-2.7b"
+
+  # generation configs
+  prompt: ""
+
+
+preprocess:
+    text_processor:
+        train:
+          name: "blip_caption"
+        eval:
+          name: "blip_caption"

@@ -1,0 +1,23 @@
+ # Copyright (c) 2022, salesforce.com, inc.
+ # All rights reserved.
+ # SPDX-License-Identifier: BSD-3-Clause
+ # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+datasets:
+  protein_function: # name of the dataset builder
+    dataset_card: dataset_card/protein_function.md
+    # data_dir: ${env.data_dir}/datasets
+    data_type: features # [images|videos|features]
+
+    build_info:
+      # Be careful not to append minus sign (-) before split to avoid itemizing
+      annotations:
+        train:
+          url: https://storage.googleapis.com/protein_function_train.csv
+          storage: /cluster/home/wenkai/LAVIS/protein/annotations/protein_function_train_.csv
+        val:
+          url: https://storage.googleapis.com/protein_function_val.csv
+          storage:  /cluster/home/wenkai/LAVIS/protein/annotations/protein_function_val_.csv
+        test:
+          url: https://storage.googleapis.com/protein_function_test.csv
+          storage: /cluster/home/wenkai/LAVIS/protein/annotations/protein_function_test_.csv

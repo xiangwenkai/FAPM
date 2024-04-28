@@ -1,0 +1,85 @@
+{
+    "run": {
+        "task": "image_text_pretrain",
+        "lr_sched": "linear_warmup_cosine_lr",
+        "init_lr": 1e-05,
+        "min_lr": 1e-06,
+        "warmup_lr": 1e-06,
+        "weight_decay": 0.05,
+        "max_epoch": 3,
+        "batch_size_train": 32,
+        "batch_size_eval": 32,
+        "num_workers": 8,
+        "warmup_steps": 1000,
+        "seed": 42,
+        "output_dir": "output/BLIP2/Pretrain_stage2",
+        "amp": true,
+        "resume_ckpt_path": null,
+        "evaluate": false,
+        "train_splits": [
+            "train"
+        ],
+        "device": "cuda",
+        "world_size": 8,
+        "dist_url": "env://",
+        "distributed": true,
+        "rank": 0,
+        "gpu": 0,
+        "dist_backend": "nccl"
+    },
+    "model": {
+        "arch": "blip2_protein_opt",
+        "load_finetuned": false,
+        "pretrained": "/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage2/20240318102/checkpoint_3.pth",
+        "finetuned": "",
+        "num_query_token": 64,
+        "opt_model": "facebook/opt-2.7b",
+        "prompt": "",
+        "model_type": "pretrain_protein_opt2.7b",
+        "load_pretrained": true,
+        "freeze_vit": true,
+        "max_protein_len": 1000,
+        "max_txt_len": 150,
+        "esm_size": "3b"
+    },
+    "preprocess": {
+        "text_processor": {
+            "train": {
+                "name": "blip_caption"
+            },
+            "eval": {
+                "name": "blip_caption"
+            }
+        }
+    },
+    "datasets": {
+        "GO_protein_function": {
+            "dataset_card": "dataset_card/protein_function.md",
+            "data_type": "features",
+            "build_info": {
+                "annotations": {
+                    "train": {
+                        "url": "https://storage.googleapis.com/GO_protein_function_train.csv",
+                        "storage": "/cluster/home/wenkai/LAVIS/data/pretrain/multitask/train_go_exp.pkl"
+                    },
+                    "val": {
+                        "url": "https://storage.googleapis.com/GO_protein_function_val.csv",
+                        "storage": "/cluster/home/wenkai/LAVIS/data/pretrain/multitask/test_mf_go_exp.pkl"
+                    },
+                    "test": {
+                        "url": "https://storage.googleapis.com/GO_protein_function_test.csv",
+                        "storage": "/cluster/home/wenkai/LAVIS/data/pretrain/multitask/test_mf_go_exp.pkl"
+                    }
+                }
+            },
+            "text_processor": {
+                "train": {
+                    "name": "blip_caption"
+                }
+            }
+        }
+    }
+}
+{"train_lr": "0.000", "train_loss": "0.563"}
+{"train_lr": "0.000", "train_loss": "0.533"}
+{"train_lr": "0.000", "train_loss": "0.515"}
