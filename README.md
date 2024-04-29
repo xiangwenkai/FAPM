@@ -23,7 +23,7 @@ pip install -e .
 ```
 
 ## Training
-data config: lavis/configs/datasets/protein/GO_defaults_cap.yaml \n
+data config: lavis/configs/datasets/protein/GO_defaults_cap.yaml  
 stage1 config: lavis/projects/blip2/train/protein_pretrain_stage1.yaml \n
 stage1 training command: run_scripts/blip2/train/protein_pretrain_domain_stage1.sh \n
 stage2 config: lavis/projects/blip2/train/protein_pretrain_stage2.yaml \n
