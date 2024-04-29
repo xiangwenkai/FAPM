@@ -22,6 +22,11 @@ cd LAVIS
 pip install -e .
 ```
 
+### Datasets
+Raw data are avaliable at https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2023_04/knowledgebase/  
+The experimental train/val/test set of Swiss-Prot are avaliable at data/swissprot_exp  
+
+
 ## Training
 data config: lavis/configs/datasets/protein/GO_defaults_cap.yaml  
 stage1 config: lavis/projects/blip2/train/protein_pretrain_stage1.yaml  
@@ -30,9 +35,6 @@ stage2 config: lavis/projects/blip2/train/protein_pretrain_stage2.yaml
 stage2 training/finetuning command: run_scripts/blip2/train/protein_pretrain_domain_stage2.sh  
 
 
-### Datasets
-Raw data are avaliable at https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2023_04/knowledgebase/  
-The experimental train/val/test set of Swiss-Prot are avaliable at data/swissprot_exp  
 
 
 
