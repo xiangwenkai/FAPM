@@ -24,18 +24,19 @@ pip install -e .
 
 ## Training
 data config: lavis/configs/datasets/protein/GO_defaults_cap.yaml  
-stage1 config: lavis/projects/blip2/train/protein_pretrain_stage1.yaml \n
-stage1 training command: run_scripts/blip2/train/protein_pretrain_domain_stage1.sh \n
-stage2 config: lavis/projects/blip2/train/protein_pretrain_stage2.yaml \n
-stage1 training command: run_scripts/blip2/train/protein_pretrain_domain_stage2.sh \n
+stage1 config: lavis/projects/blip2/train/protein_pretrain_stage1.yaml  
+stage1 training command: run_scripts/blip2/train/protein_pretrain_domain_stage1.sh  
+stage2 config: lavis/projects/blip2/train/protein_pretrain_stage2.yaml  
+stage2 training/finetuning command: run_scripts/blip2/train/protein_pretrain_domain_stage2.sh  
+
+
+### Datasets
 
 
 
 
 
 
-### Load Datasets
 
 
-## Contact us
 
