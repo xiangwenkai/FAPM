@@ -31,6 +31,8 @@ stage2 training/finetuning command: run_scripts/blip2/train/protein_pretrain_dom
 
 
 ### Datasets
+Raw data are avaliable at https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2023_04/knowledgebase/  
+The experimental train/val/test set of Swiss-Prot are avaliable at data/swissprot_exp  
 
 
 
