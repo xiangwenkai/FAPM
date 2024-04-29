@@ -13,22 +13,11 @@ datasets:
       # Be careful not to append minus sign (-) before split to avoid itemizing
       annotations:
         train:
-          url: https://storage.googleapis.com/GO_protein_function_train.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/mf_bp_cc/swissprot_domain_seq_prompt_cc_new.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/mf_bp_cc/train_exp_prompt_bp_new.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/cases_bp.csv
-          storage: /cluster/home/wenkai/LAVIS/data/pretrain/mf_bp_cc/cases_bp.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/mol_instruction/test_union.pkl
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/deepgose/train_mf_go_exp.pkl
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/deepgose/train_cc_swissprot_domain.pkl
+          url: https://storage.googleapis.com/train_exp_prompt_bp_new.csv
+          storage: data/swissprot_exp/train_exp_prompt_bp_new.csv
         val:
-          url: https://storage.googleapis.com/GO_protein_function_val.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/review_func_time_split/val_mf.csv
-          storage: /cluster/home/wenkai/LAVIS/data/pretrain/mf_bp_cc/test_exp_mf_new.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/multitask/test_mf_go_exp.pkl
+          url: https://storage.googleapis.com/val_exp_prompt_bp_new.csv
+          storage: data/swissprot_exp/val_exp_prompt_bp_new.csv
         test:
-          url: https://storage.googleapis.com/GO_protein_function_test.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/multitask/cases_mf.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/cases_mf.csv
-          #storage: /cluster/home/wenkai/LAVIS/data/pretrain/deepgose/test_mf_go_exp.pkl
-          storage: /cluster/home/wenkai/LAVIS/data/pretrain/mf_bp_cc/test_exp_prompt_mf_new.csv
+          url: https://storage.googleapis.com/test_exp_prompt_bp_new.csv
+            storage: data/swissprot_exp/test_exp_prompt_bp_new.csv

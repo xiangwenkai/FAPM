@@ -7,7 +7,7 @@ model:
   arch: blip2_protein
   model_type: pretrain
   load_pretrained: False #pretrain from scratch
-  #pretrained: '/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage1/20231118115/checkpoint_9.pth'
+  #pretrained: 'lavis/output/BLIP2/Pretrain_stage1/20231118115/checkpoint_4.pth'
   freeze_vit: True
   max_protein_len: 1000
   max_txt_len: 150
