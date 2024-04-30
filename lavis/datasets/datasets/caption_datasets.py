@@ -141,8 +141,8 @@ class ProteinDataset(__DisplMixin):
         ann = self.annotation[index]
 
         name = ann['image']
-        #image_emb = torch.load('/cluster/home/wenkai/LAVIS/data/pretrain/ipr_domain_emb_esm2/{}.pt'.format(name))['representations'][33]
-        image_emb = torch.load('/cluster/home/wenkai/LAVIS/data/pretrain/ipr_domain_emb_esm2_3b/{}.pt'.format(name))['representations'][36]
+        #image_emb = torch.load('data/emb_esm2_650m/{}.pt'.format(name))['representations'][33]
+        image_emb = torch.load('data/emb_esm2_3b/{}.pt'.format(name))['representations'][36]
         image_emb = F.pad(image_emb.t(), (0, 1024 - len(image_emb))).t()
         
         caption = self.text_processor(ann['caption'])

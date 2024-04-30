@@ -4,8 +4,8 @@
  # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 
 model:
-  arch: blip2_protein_opt
-  model_type: pretrain_protein_opt2.7b
+  arch: blip2_protein_mistral
+  model_type: pretrain_protein_mistral7b
   load_pretrained: True
   # intialize stage 2 pretraining from stage 1 pretrained model
   pretrained: "/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage2/20240423090/checkpoint_1.pth"
