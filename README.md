@@ -42,6 +42,9 @@ stage1 training command: run_scripts/blip2/train/protein_pretrain_domain_stage1.
 stage2 config: lavis/projects/blip2/train/protein_pretrain_stage2.yaml  
 stage2 training/finetuning command: run_scripts/blip2/train/protein_pretrain_domain_stage2.sh  
 
+## Testing
+config: lavis/projects/blip2/eval/caption_protein_eval.yaml  
+command: run_scripts/blip2/eval/eval_cap_protein.sh
 
 
 
