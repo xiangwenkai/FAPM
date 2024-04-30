@@ -26,6 +26,7 @@ def comb(s):
     random.shuffle(s_list)
     return '; '.join(s_list)
 
+
 def process_text(txts, probs):
     res = dict()
     for txt, prob in zip(txts, probs):
