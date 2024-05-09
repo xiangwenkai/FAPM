@@ -253,7 +253,6 @@ class Blip2ProteinMistral(Blip2ProteinBase):
                 #output_text_.append(';'.join(output_text[i*return_num_txt:(i+1)*return_num_txt]))
                 output_text_.append(process_text(output_text[i*return_num_txt:(i+1)*return_num_txt], probs[i*return_num_txt:(i+1)*return_num_txt]))
             #output_text_ = ['; '.join(list(set([i.strip() for i in x.split(';')]))) for x in output_text_]
-            #with open('/cluster/home/wenkai/LAVIS/output/mf_bp_cc/output_train_bp_exp_491966.txt', 'a+',  encoding="utf-8") as f:
             with open('/cluster/home/wenkai/LAVIS/output/mf_bp_cc/output_test_bp_cases_526432.txt', 'a+',  encoding="utf-8") as f:
                 for i in range(len(label)):
                     f.write(name[i] + "|" +output_text_[i]+"|"+label[i]+'\n')
@@ -263,14 +262,14 @@ class Blip2ProteinMistral(Blip2ProteinBase):
     def generate(
             self,
             samples,
-            use_nucleus_sampling=False,
-            num_beams=5,
-            max_length=30,
+            # use_nucleus_sampling=False,
+            num_beams=15,
+            max_length=32,
             min_length=1,
-            top_p=0.9,
-            repetition_penalty=1.5,
-            length_penalty=1.0,
-            num_captions=1,
+            # top_p=0.9,
+            repetition_penalty=1.0,
+            length_penalty=0.,
+            num_captions=10,
             temperature=1,
     ):
         """
@@ -287,80 +286,78 @@ class Blip2ProteinMistral(Blip2ProteinBase):
         Returns:
             captions (list): A list of strings of length batch_size * num_captions.
         """
-        with self.maybe_autocast():
-            image_embeds = samples["image"]
-            image_atts = torch.ones(image_embeds.size()[:-1], dtype=torch.long).to(
-                self.device
-            )
+        # with self.maybe_autocast():
+        image_embeds = samples["image"]
+        image_atts = torch.ones(image_embeds.size()[:-1], dtype=torch.long).to(
+            self.device
+        )
 
-            query_tokens = self.query_tokens.expand(image_embeds.shape[0], -1, -1)
-            query_output = self.Qformer.bert(
-                query_embeds=query_tokens,
-                encoder_hidden_states=image_embeds,
-                encoder_attention_mask=image_atts,
-                return_dict=True,
-            )
+        query_tokens = self.query_tokens.expand(image_embeds.shape[0], -1, -1)
+        query_output = self.Qformer.bert(
+            query_embeds=query_tokens,
+            encoder_hidden_states=image_embeds,
+            encoder_attention_mask=image_atts,
+            return_dict=True,
+        )
 
-            inputs_mistral = self.mistral_proj(query_output.last_hidden_state)
-            atts_mistral = torch.ones(inputs_mistral.size()[:-1], dtype=torch.long).to(self.device)
+        inputs_mistral = self.mistral_proj(query_output.last_hidden_state)
+        atts_mistral = torch.ones(inputs_mistral.size()[:-1], dtype=torch.long).to(self.device)
 
-            label = samples["text_input"]
-            name = samples['name']
-            text = samples['prompt']
-            # text = ['' for i in range(len(label))]
-            mistral_tokens = self.mistral_tokenizer(
-                text,
-                return_tensors="pt",
-                padding="longest",
-                truncation=True,
-                max_length=self.max_txt_len,
-            ).to(self.device)
-            # inputs_embeds = self.mistral_model.model.decoder.embed_tokens(mistral_tokens.input_ids)
-            inputs_embeds = self.mistral_model.model.embed_tokens(mistral_tokens.input_ids)
-            inputs_embeds = torch.cat([inputs_mistral, inputs_embeds], dim=1)
-            attention_mask = torch.cat([atts_mistral, mistral_tokens.attention_mask], dim=1)
-            # if name[0] == 'Pin':
-            #    torch.save(inputs_embeds, '/cluster/home/wenkai/LAVIS/output/inputs_embeds.pt')
-            #    torch.save(attention_mask, '/cluster/home/wenkai/LAVIS/output/attention_mask.pt')
+        label = samples["text_input"]
+        name = samples['name']
+        text = samples['prompt']
+        # text = ['' for i in range(len(label))]
+        mistral_tokens = self.mistral_tokenizer(
+            text,
+            return_tensors="pt",
+            padding="longest",
+            truncation=True,
+            max_length=self.max_txt_len,
+        ).to(self.device)
+        # inputs_embeds = self.mistral_model.model.decoder.embed_tokens(mistral_tokens.input_ids)
+        inputs_embeds = self.mistral_model.model.embed_tokens(mistral_tokens.input_ids)
+        inputs_embeds = torch.cat([inputs_mistral, inputs_embeds], dim=1)
+        attention_mask = torch.cat([atts_mistral, mistral_tokens.attention_mask], dim=1)
+        # if name[0] == 'Pin':
+        #    torch.save(inputs_embeds, '/cluster/home/wenkai/LAVIS/output/inputs_embeds.pt')
+        #    torch.save(attention_mask, '/cluster/home/wenkai/LAVIS/output/attention_mask.pt')
 
-            # self.get_eval = False
-            #'''
-            #num_txt = 15
-            #return_num_txt = 10
-            num_txt = 15
-            return_num_txt = 10
-            with torch.no_grad():
-                outputs = self.mistral_model.generate(inputs_embeds=inputs_embeds, attention_mask=attention_mask, min_length=1,
-                                                  max_length=32, temperature=1., return_dict_in_generate=True,
-                                                  output_scores=True,
-                                                  repetition_penalty=1., num_beams=num_txt,
-                                                  length_penalty=0., num_return_sequences=return_num_txt,
-                                                  eos_token_id=self.eos_token_id)
-            output_text = self.mistral_tokenizer.batch_decode(outputs['sequences'], skip_special_tokens=True)
-            '''
-            num_txt = 5
-            return_num_txt = 1
-            with torch.no_grad():
-                outputs = self.mistral_model.generate(inputs_embeds=inputs_embeds, attention_mask=attention_mask, min_length=1,
-                                                  max_length=96,temperature=1.,return_dict_in_generate=True, output_scores=True,
-                                                  repetition_penalty=1., num_beams=num_txt,
-                                                  length_penalty=1, num_return_sequences=return_num_txt,eos_token_id=self.eos_token_id)
-            output_text = self.mistral_tokenizer.batch_decode(outputs['sequences'], skip_special_tokens=True)
-            '''
-            probs = F.softmax(outputs['sequences_scores'])
-            # print(output_text)
-            output_text = [x.replace('\n', '').strip() for x in output_text]
+        # self.get_eval = False
+        #'''
+        #num_txt = 15
+        #return_num_txt = 10
+        with torch.no_grad():
+            outputs = self.mistral_model.generate(inputs_embeds=inputs_embeds, attention_mask=attention_mask, min_length=min_length,
+                                              max_length=max_length, temperature=temperature, return_dict_in_generate=True,
+                                              output_scores=True,
+                                              repetition_penalty=repetition_penalty, num_beams=num_beams,
+                                              length_penalty=length_penalty, num_return_sequences=num_captions,
+                                              eos_token_id=self.eos_token_id)
+        output_text = self.mistral_tokenizer.batch_decode(outputs['sequences'], skip_special_tokens=True)
+        '''
+        num_txt = 5
+        return_num_txt = 1
+        with torch.no_grad():
+            outputs = self.mistral_model.generate(inputs_embeds=inputs_embeds, attention_mask=attention_mask, min_length=1,
+                                              max_length=96,temperature=1.,return_dict_in_generate=True, output_scores=True,
+                                              repetition_penalty=1., num_beams=num_txt,
+                                              length_penalty=1, num_return_sequences=return_num_txt,eos_token_id=self.eos_token_id)
+        output_text = self.mistral_tokenizer.batch_decode(outputs['sequences'], skip_special_tokens=True)
+        '''
+        probs = F.softmax(outputs['sequences_scores'])
+        # print(output_text)
+        output_text = [x.replace('\n', '').strip() for x in output_text]
 
-            output_text_ = []
+        output_text_ = []
+        for i in range(len(label)):
+            # output_text_.append(';'.join(output_text[i*return_num_txt:(i+1)*return_num_txt]))
+            output_text_.append(process_text(output_text[i * num_captions:(i + 1) * num_captions],
+                                             probs[i * num_captions:(i + 1) * num_captions]))
+        #output_text_ = ['; '.join(list(set([i.strip() for i in x.split(';')]))) for x in output_text_]
+        with open('/cluster/home/wenkai/LAVIS/output/mf_bp_cc/output_test_mf_exp_493552.txt', 'a+',  encoding="utf-8") as f:
             for i in range(len(label)):
-                # output_text_.append(';'.join(output_text[i*return_num_txt:(i+1)*return_num_txt]))
-                output_text_.append(process_text(output_text[i * return_num_txt:(i + 1) * return_num_txt],
-                                                 probs[i * return_num_txt:(i + 1) * return_num_txt]))
-            #output_text_ = ['; '.join(list(set([i.strip() for i in x.split(';')]))) for x in output_text_]
-            with open('/cluster/home/wenkai/LAVIS/output/mf_bp_cc/output_test_mf_exp_493552.txt', 'a+',  encoding="utf-8") as f:
-                for i in range(len(label)):
-                    f.write(name[i] + "|" +output_text_[i]+"|"+label[i]+'\n')
-            return output_text_
+                f.write(name[i] + "|" +output_text_[i]+"|"+label[i]+'\n')
+        return output_text_
 
 
     def predict_answers(
