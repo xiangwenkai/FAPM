@@ -21,20 +21,23 @@ def process_text(txts, probs):
     return '; '.join([str((k, v)) for k, v in res.items()])
 
 # model = Blip2ProteinOPT(esm_size='3b')
+# model.load_checkpoint('/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage2/20240327081/checkpoint_2.pth')
 model = Blip2ProteinMistral(esm_size='3b')
 model.load_checkpoint('model_save/checkpoint_mf2.pth')
-# model.load_checkpoint('/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage2/20240327081/checkpoint_2.pth')
+model.to('cuda')
 
-esm_emb = torch.load('/cluster/home/wenkai/LAVIS/data/pretrain/ipr_domain_emb_esm2_3b/P18281.pt')['representations'][36]
-esm_emb = F.pad(esm_emb.t(), (0, 1024 - len(esm_emb))).t()
-samples = {'name': 'P18281',
+# esm_emb = torch.load('/cluster/home/wenkai/LAVIS/data/pretrain/ipr_domain_emb_esm2_3b/P18281.pt')['representations'][36]
+esm_emb = torch.load('data/emb_esm2_3b/P18281.pt')['representations'][36]
+esm_emb = F.pad(esm_emb.t(), (0, 1024 - len(esm_emb))).t().to('cuda')
+samples = {'name': ['P18281'],
            'image': torch.unsqueeze(esm_emb, dim=0),
-           'text_input': 'actin monomer binding',
-           'prompt': 'Acanthamoeba'}
+           'text_input': ['actin monomer binding'],
+           'prompt': ['Acanthamoeba']}
 
 prediction = model.generate(samples)
 
-godb = Ontology(f'/cluster/home/wenkai/LAVIS/data/go1.4-basic.obo', with_rels=True)
+# godb = Ontology(f'/cluster/home/wenkai/LAVIS/data/go1.4-basic.obo', with_rels=True)
+godb = Ontology(f'data/go1.4-basic.obo', with_rels=True)
 
 go_des = pd.read_csv('data/go_descriptions1.4.txt', sep='|', header=None)
 go_des.columns = ['id', 'text']
@@ -43,16 +46,18 @@ go_des['id'] = go_des['id'].apply(lambda x: re.sub('_', ':', x))
 go_obo_set = set(go_des['id'].tolist())
 go_des['text'] = go_des['text'].apply(lambda x: x.lower())
 GO_dict = dict(zip(go_des['text'], go_des['id']))
+Func_dict = dict(zip(go_des['id'], go_des['text']))
 
 # terms_mf = pd.read_pickle('/cluster/home/wenkai/deepgo2/data/mf/terms.pkl')
-terms_mf = pd.read_pickle('data/terms/terms.pkl')
-choices_mf = list(set(terms_mf['gos']))
+terms_mf = pd.read_pickle('data/terms/mf_terms.pkl')
+choices_mf = [Func_dict[i] for i in list(set(terms_mf['gos']))]
 choices = {x.lower(): x for x in choices_mf}
 
 pred_terms_list = []
 pred_go_list = []
 prop_annotations = []
 for x in prediction:
+    x = [eval(i) for i in x.split('; ')]
     pred_terms = []
     pred_go = []
     annot_set = set()
@@ -69,5 +74,6 @@ for x in prediction:
     annots = list(annot_set)
     prop_annotations.append(annots)
 
+print(f"Predictions of GO terms: \n{pred_terms_list} \nPredictions of GO id: \n{pred_go_list} \nPredictions of GO id propgated: \n{prop_annotations}")
 
 
