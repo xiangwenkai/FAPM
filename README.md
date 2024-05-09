@@ -46,6 +46,8 @@ stage2 training/finetuning command: run_scripts/blip2/train/protein_pretrain_dom
 config: lavis/projects/blip2/eval/caption_protein_eval.yaml  
 command: run_scripts/blip2/eval/eval_cap_protein.sh
 
+## Inference example
+FAPM_inference.py
 
 
 
