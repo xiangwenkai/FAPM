@@ -50,7 +50,8 @@ config: lavis/projects/blip2/eval/caption_protein_eval.yaml
 command: run_scripts/blip2/eval/eval_cap_protein.sh  
 
 ## Inference example
-FAPM_inference.py
+We provide an example in FAPM_inference.py. You can change the example protein to you custom case  
+
 
 
 
