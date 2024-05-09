@@ -1,8 +1,9 @@
 import torch
 import torch.nn as nn
 import pandas as pd
-
+import torch.nn.functional as F
 from lavis.models.protein_models.protein_function_opt import Blip2ProteinMistral
+# from lavis.models.blip2_models.blip2_opt import Blip2ProteinOPT
 from data.evaluate_data.utils import Ontology
 import random
 import difflib
@@ -19,15 +20,19 @@ def process_text(txts, probs):
                 res[txt_sub] = round(prob.item(),3)
     return '; '.join([str((k, v)) for k, v in res.items()])
 
-
+# model = Blip2ProteinOPT(esm_size='3b')
 model = Blip2ProteinMistral(esm_size='3b')
 model.load_checkpoint('model_save/checkpoint_mf2.pth')
-samples = {'name': ['P18281'],
-           'image': ['MNPELQSAIGQGAALKHAETVDKSAPQIENVTVKKVDRSSFLEEVAKPHELKHAETVDKSGPAIPEDVHVKKVDRGAFLSEIEKAAKQ'],
-           'text_input': ['actin monomer binding'],
-           'prompt': ['Acanthamoeba']}
+# model.load_checkpoint('/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage2/20240327081/checkpoint_2.pth')
 
-prediction = model(samples)
+esm_emb = torch.load('/cluster/home/wenkai/LAVIS/data/pretrain/ipr_domain_emb_esm2_3b/P18281.pt')['representations'][36]
+esm_emb = F.pad(esm_emb.t(), (0, 1024 - len(esm_emb))).t()
+samples = {'name': 'P18281',
+           'image': torch.unsqueeze(esm_emb, dim=0),
+           'text_input': 'actin monomer binding',
+           'prompt': 'Acanthamoeba'}
+
+prediction = model.generate(samples)
 
 godb = Ontology(f'/cluster/home/wenkai/LAVIS/data/go1.4-basic.obo', with_rels=True)
 
