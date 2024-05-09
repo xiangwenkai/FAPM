@@ -42,12 +42,16 @@ stage1 training command: run_scripts/blip2/train/protein_pretrain_domain_stage1.
 stage2 config: lavis/projects/blip2/train/protein_pretrain_stage2.yaml  
 stage2 training/finetuning command: run_scripts/blip2/train/protein_pretrain_domain_stage2.sh  
 
+## Trained models
+You can download our trained models from drive: https://drive.google.com/drive/folders/1aA0eSYxNw3DvrU5GU1Cu-4q2kIxxAGSE?usp=drive_link  
+
 ## Testing
 config: lavis/projects/blip2/eval/caption_protein_eval.yaml  
-command: run_scripts/blip2/eval/eval_cap_protein.sh
+command: run_scripts/blip2/eval/eval_cap_protein.sh  
 
 ## Inference example
-FAPM_inference.py
+We provide an example in *FAPM_inference.py*. You can change the example protein to you custom case  
+
 
 
 
