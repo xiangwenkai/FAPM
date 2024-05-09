@@ -10,16 +10,6 @@ import difflib
 import re
 
 
-def process_text(txts, probs):
-    res = dict()
-    for txt, prob in zip(txts, probs):
-        txt_sep = [x.strip() for x in txt.split(';')]
-        for txt_sub in txt_sep:
-            txt_sub = txt_sub.replace('|', '')
-            if txt_sub not in res and txt_sub != '':
-                res[txt_sub] = round(prob.item(),3)
-    return '; '.join([str((k, v)) for k, v in res.items()])
-
 # model = Blip2ProteinOPT(esm_size='3b')
 # model.load_checkpoint('/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage2/20240327081/checkpoint_2.pth')
 model = Blip2ProteinMistral(esm_size='3b')
