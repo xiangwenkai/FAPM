@@ -24,8 +24,9 @@ pip install -e .
 
 ### Datasets
 #### 1.
-Raw data are avaliable at https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2023_04/knowledgebase/  
-The experimental train/val/test set of Swiss-Prot are avaliable at data/swissprot_exp  
+Raw data are avaliable at https://ftp.uniprot.org/pub/databases/uniprot/previous_releases/release-2023_04/knowledgebase/, this file is very large and need to be processed to get its name, sequence, GO label, function description and prompt.  
+The domain level protein dataset are avaliable at https://ftp.ebi.ac.uk/pub/databases/interpro/releases/95.0/protein2ipr.dat.gz  
+In this respository, We provide the experimental train/val/test sets of Swiss-Prot, which are avaliable at data/swissprot_exp  
 #### 2.
 ESM2 embeddings generation: https://github.com/facebookresearch/esm  
 The generation command:
