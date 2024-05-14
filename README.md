@@ -34,6 +34,8 @@ git clone https://github.com/facebookresearch/esm.git
 python scripts/extract.py esm2_t33_650M_UR50D you_path/protein.fasta you_path_to_save_embedding_files --repr_layers 33 --truncation_seq_length 1024 --include per_tok
 ```
 
+## Pretraining language models  
+Source: https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B
 
 ## Training
 data config: lavis/configs/datasets/protein/GO_defaults_cap.yaml  
