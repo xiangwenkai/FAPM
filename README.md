@@ -1,7 +1,7 @@
 ## Introduction
 <p align="center">
     <br>
-    <img src="assets/mmp.png"/>
+    <img src="assets/fapm.png"/>
     <br>
 <p>
 
