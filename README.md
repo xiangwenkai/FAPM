@@ -20,6 +20,8 @@ conda activate lavis
 git clone https://github.com/xiangwenkai/FAPM.git
 cd FAPM
 pip install -e .
+
+pip install Biopython
 ```
 
 ### Datasets
