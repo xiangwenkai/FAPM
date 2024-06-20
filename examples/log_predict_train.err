@@ -1,2 +1,0 @@
-/cluster/home/wenkai/.conda/envs/LAVIS/lib/python3.8/site-packages/diffusers/models/cross_attention.py:30: FutureWarning: Importing from cross_attention is deprecated. Please import from diffusers.models.attention_processor instead.
-  deprecate(

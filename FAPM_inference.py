@@ -3,6 +3,7 @@ import torch.nn as nn
 import pandas as pd
 import torch.nn.functional as F
 from lavis.models.protein_models.protein_function_opt import Blip2ProteinMistral
+# from lavis.models.base_model import FAPMConfig
 # from lavis.models.blip2_models.blip2_opt import Blip2ProteinOPT
 from data.evaluate_data.utils import Ontology
 import random
@@ -10,7 +11,7 @@ import difflib
 import re
 
 
-# model = Blip2ProteinOPT(esm_size='3b')
+# model = Blip2ProteinOPT(config=FAPMConfig(), esm_size='3b')
 # model.load_checkpoint('/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage2/20240327081/checkpoint_2.pth')
 model = Blip2ProteinMistral(esm_size='3b')
 model.load_checkpoint('model_save/checkpoint_mf2.pth')

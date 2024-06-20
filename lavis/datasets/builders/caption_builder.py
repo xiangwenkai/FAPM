@@ -15,10 +15,7 @@ from lavis.datasets.datasets.coco_caption_datasets import (
 )
 
 from lavis.common.registry import registry
-from lavis.datasets.datasets.video_caption_datasets import (
-    VideoCaptionDataset,
-    VideoCaptionEvalDataset,
-)
+
 
 
 @registry.register_builder("coco_caption")
@@ -61,32 +58,3 @@ class COCOCapBuilder(BaseDatasetBuilder):
         "default": "configs/datasets/nocaps/defaults.yaml",
     }
 
-
-@registry.register_builder("msrvtt_caption")
-class MSRVTTCapBuilder(BaseDatasetBuilder):
-    train_dataset_cls = VideoCaptionDataset
-    eval_dataset_cls = VideoCaptionEvalDataset
-
-    DATASET_CONFIG_DICT = {
-        "default": "configs/datasets/msrvtt/defaults_cap.yaml",
-    }
-
-
-@registry.register_builder("msvd_caption")
-class MSVDCapBuilder(BaseDatasetBuilder):
-    train_dataset_cls = VideoCaptionDataset
-    eval_dataset_cls = VideoCaptionEvalDataset
-
-    DATASET_CONFIG_DICT = {
-        "default": "configs/datasets/msvd/defaults_cap.yaml",
-    }
-
-
-@registry.register_builder("vatex_caption")
-class VATEXCapBuilder(BaseDatasetBuilder):
-    train_dataset_cls = VideoCaptionDataset
-    eval_dataset_cls = VideoCaptionEvalDataset
-
-    DATASET_CONFIG_DICT = {
-        "default": "configs/datasets/vatex/defaults_cap.yaml",
-    }
