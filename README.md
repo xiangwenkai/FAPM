@@ -17,8 +17,8 @@ conda activate lavis
 2. for development, you may build from source
 
 ```bash
-git clone https://github.com/salesforce/LAVIS.git
-cd LAVIS
+git clone https://github.com/xiangwenkai/FAPM.git
+cd FAPM
 pip install -e .
 ```
 
