@@ -22,6 +22,7 @@ cd FAPM
 pip install -e .
 
 pip install Biopython
+pip install fair-esm
 ```
 
 ### Datasets
