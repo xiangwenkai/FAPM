@@ -37,12 +37,12 @@ Source code for ESM2 embeddings generation: *https://github.com/facebookresearch
 The generation command:  
 ```bash
 conda activate FAPM
-python esm_scripts/extract.py esm2_t33_3B_UR50D you_path/protein.fasta you_path_to_save_embedding_files --repr_layers 36 --truncation_seq_length 1024 --include per_tok
+python esm_scripts/extract.py esm2_t36_3B_UR50D you_path/protein.fasta you_path_to_save_embedding_files --repr_layers 36 --truncation_seq_length 1024 --include per_tok
 ```
 Example:
 ```
 conda activate FAPM
-python esm_scripts/extract.py esm2_t33_3B_UR50D data/fasta/example.fasta data/emb_esm2_3b --repr_layers 36 --truncation_seq_length 1024 --include per_tok
+python esm_scripts/extract.py esm2_t36_3B_UR50D data/fasta/example.fasta data/emb_esm2_3b --repr_layers 36 --truncation_seq_length 1024 --include per_tok
 ```  
 
 The default path to save embedding files is **data/emb_esm2_3b**
