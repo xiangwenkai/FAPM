@@ -31,11 +31,10 @@ Raw data are avaliable at *https://ftp.uniprot.org/pub/databases/uniprot/previou
 The domain level protein dataset we used are avaliable at *https://ftp.ebi.ac.uk/pub/databases/interpro/releases/95.0/protein2ipr.dat.gz*  
 In this respository, We provide the experimental train/val/test sets of Swiss-Prot, which are avaliable at data/swissprot_exp  
 #### 2.ESM2 embeddings  
-ESM2 embeddings generation code: *https://github.com/facebookresearch/esm*  
+Source code for ESM2 embeddings generation: *https://github.com/facebookresearch/esm*  
 The generation command:  
 ```bash
-git clone https://github.com/facebookresearch/esm.git
-python scripts/extract.py esm2_t33_3B_UR50D you_path/protein.fasta you_path_to_save_embedding_files --repr_layers 36 --truncation_seq_length 1024 --include per_tok
+python esm_scripts/extract.py esm2_t33_3B_UR50D you_path/protein.fasta you_path_to_save_embedding_files --repr_layers 36 --truncation_seq_length 1024 --include per_tok
 ```
 The default path to save embedding files in this respository is **data/emb_esm2_3b**
 
