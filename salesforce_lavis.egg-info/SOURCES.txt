@@ -713,7 +713,3 @@ salesforce_lavis.egg-info/dependency_links.txt
 salesforce_lavis.egg-info/not-zip-safe
 salesforce_lavis.egg-info/requires.txt
 salesforce_lavis.egg-info/top_level.txt
-tests/models/test_albef.py
-tests/models/test_blip.py
-tests/models/test_blip2.py
-tests/models/test_pnp_vqa.py
