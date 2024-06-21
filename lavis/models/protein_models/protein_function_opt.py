@@ -115,7 +115,7 @@ class Blip2ProteinMistral(Blip2ProteinBase):
             "\n", add_special_tokens=False
         ).input_ids[1]
         print(f"LLM hidden size: {self.mistral_model.config.hidden_size}")
-        self.mistral_proj = nn.Linear(
+        self.opt_proj = nn.Linear(
             self.Qformer.config.hidden_size, self.mistral_model.config.hidden_size
         )
 
@@ -150,7 +150,7 @@ class Blip2ProteinMistral(Blip2ProteinBase):
             return_dict=True,
         )
 
-        inputs_mistral = self.mistral_proj(query_output.last_hidden_state)
+        inputs_mistral = self.opt_proj(query_output.last_hidden_state)
 
         #torch.save(query_output.last_hidden_state, '/cluster/home/wenkai/LAVIS/output/mf_bp_cc/query_output_mf/{}.pt'.format(samples['name'][0]))
         #torch.save(inputs_mistral, '/cluster/home/wenkai/LAVIS/output/mf_bp_cc/inputs_mistral_mf/{}.pt'.format(samples['name'][0]))
@@ -268,7 +268,7 @@ class Blip2ProteinMistral(Blip2ProteinBase):
             min_length=1,
             # top_p=0.9,
             repetition_penalty=1.0,
-            length_penalty=0.,
+            length_penalty=1.,
             num_captions=10,
             temperature=1,
     ):
@@ -300,7 +300,7 @@ class Blip2ProteinMistral(Blip2ProteinBase):
                 return_dict=True,
             )
 
-            inputs_mistral = self.mistral_proj(query_output.last_hidden_state)
+            inputs_mistral = self.opt_proj(query_output.last_hidden_state)
             atts_mistral = torch.ones(inputs_mistral.size()[:-1], dtype=torch.long).to(self.device)
 
             label = samples["text_input"]
@@ -328,7 +328,7 @@ class Blip2ProteinMistral(Blip2ProteinBase):
             #return_num_txt = 10
             with torch.no_grad():
                 outputs = self.mistral_model.generate(inputs_embeds=inputs_embeds, attention_mask=attention_mask, min_length=min_length,
-                                                  max_length=max_length, temperature=temperature, return_dict_in_generate=True,
+                                                  max_new_tokens=max_length, temperature=temperature, return_dict_in_generate=True,
                                                   output_scores=True,
                                                   repetition_penalty=repetition_penalty, num_beams=num_beams,
                                                   length_penalty=length_penalty, num_return_sequences=num_captions,
@@ -386,7 +386,7 @@ class Blip2ProteinMistral(Blip2ProteinBase):
             return_dict=True,
         )
 
-        inputs_mistral = self.mistral_proj(query_output.last_hidden_state)
+        inputs_mistral = self.opt_proj(query_output.last_hidden_state)
         atts_mistral = torch.ones(inputs_mistral.size()[:-1], dtype=torch.long).to(self.device)
 
         label = samples["text_input"]

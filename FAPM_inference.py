@@ -17,6 +17,13 @@ model = Blip2ProteinMistral(esm_size='3b')
 model.load_checkpoint('model_save/checkpoint_mf2.pth')
 model.to('cuda')
 
+# for name, param in model.named_parameters():
+#     if 'opt' in name:
+#         new_name = name.replace('opt', 'mistral')
+#         param.rename(new_name)
+
+
+
 # esm_emb = torch.load('/cluster/home/wenkai/LAVIS/data/pretrain/ipr_domain_emb_esm2_3b/P18281.pt')['representations'][36]
 esm_emb = torch.load('data/emb_esm2_3b/P18281.pt')['representations'][36]
 esm_emb = F.pad(esm_emb.t(), (0, 1024 - len(esm_emb))).t().to('cuda')
