@@ -5,7 +5,7 @@
     <br>
 <p>  
     
-Huggingface *repo: https://huggingface.co/wenkai/FAPM/*  
+Huggingface repo: *https://huggingface.co/wenkai/FAPM/*  
 
 ## Installation
 
