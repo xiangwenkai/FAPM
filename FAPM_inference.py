@@ -9,7 +9,6 @@ import random
 from lavis.models.base_model import FAPMConfig
 import argparse
 
-prop = True
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='FAPM')
@@ -17,9 +16,10 @@ if __name__ == '__main__':
     parser.add_argument('--example_path', type=str, help='Example protein path')
     parser.add_argument('--device', type=str, default='cuda', help='Which gpu to use if any (default: cuda)')
     parser.add_argument('--prompt', type=str, default='none', help='Input prompt for protein function prediction')
-    parser.add_argument('--ground_truth', type=str, default='none', help='ground truth function')
+    parser.add_argument('--ground_truth', type=str, default='none', help='Ground truth function')
+    parser.add_argument('--prop', type=bool, default=True, help='Match and propagation the predictions of language model')
     args = parser.parse_args()
-    test_sdf_paths = args.model_path
+    prop = args.prop
 
     # model = Blip2ProteinOPT(config=FAPMConfig(), esm_size='3b')
     # model.load_checkpoint('/cluster/home/wenkai/LAVIS/lavis/output/BLIP2/Pretrain_stage2/20240327081/checkpoint_2.pth')
