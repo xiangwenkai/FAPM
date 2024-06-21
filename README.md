@@ -23,8 +23,9 @@ git clone https://github.com/xiangwenkai/FAPM.git
 cd FAPM
 pip install -e .
 
-pip install Biopython
-pip install fair-esm
+# if needed
+# pip install Biopython
+# pip install fair-esm
 ```
 
 ### Datasets
