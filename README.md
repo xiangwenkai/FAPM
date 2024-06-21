@@ -44,8 +44,9 @@ Example:
 conda activate FAPM
 python esm_scripts/extract.py esm2_t36_3B_UR50D data/fasta/example.fasta data/emb_esm2_3b --repr_layers 36 --truncation_seq_length 1024 --include per_tok
 ```  
-
 The default path to save embedding files is **data/emb_esm2_3b**
+You can refer to *data/fasta/prepare_custom_fasta.py* to prepare your custom fasta data.  
+
 
 ## Pretraining language models  
 Source: *https://huggingface.co/teknium/OpenHermes-2.5-Mistral-7B*
