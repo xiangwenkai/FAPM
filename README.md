@@ -71,7 +71,8 @@ python FAPM_inference.py \
 --model_path model/checkpoint_mf2.pth \
 --example_path data/emb_esm2_3b/P18281.pt \
 --device cuda \
---prompt Acanthamoeba
+--prompt Acanthamoeba \
+--prop True
 ```  
 
 
