@@ -14,13 +14,21 @@ import torch.nn as nn
 from lavis.common.dist_utils import download_cached_file, is_dist_avail_and_initialized
 from lavis.common.utils import get_abs_path, is_url
 from omegaconf import OmegaConf
+from transformers import PreTrainedModel, PretrainedConfig
 
 
-class BaseModel(nn.Module):
+class FAPMConfig(PretrainedConfig):
+    model_type = 'FAPM'
+    def __init__(self, important_param=42, **kwargs):
+        super().__init__(**kwargs)
+
+
+class BaseModel(PreTrainedModel):
     """Base class for models."""
-
-    def __init__(self):
-        super().__init__()
+    config_class = FAPMConfig
+    def __init__(self, config):
+        super().__init__(config)
+        self.config = config
 
     @property
     def device(self):

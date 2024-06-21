@@ -14,10 +14,11 @@ import torch.nn.functional as F
 
 from lavis.common.registry import registry
 from lavis.models.blip2_models.blip2 import Blip2Base, Blip2ProteinBase, disabled_train
-from transformers import AutoTokenizer, LlamaTokenizer, MistralForCausalLM
+from transformers import AutoTokenizer, LlamaTokenizer, MistralForCausalLM, MistralConfig
 import transformers
 import esm
 import random
+from lavis.models.base_model import FAPMConfig
 
 
 def comb(s):
@@ -44,9 +45,11 @@ class Blip2ProteinMistral(Blip2ProteinBase):
     PRETRAINED_MODEL_CONFIG_DICT = {
         "pretrain_protein_mistral7b": "configs/models/blip2/pretrain_protein_mistral7b.yaml",
     }
+    config_class = FAPMConfig
 
     def __init__(
             self,
+            config,
             num_query_token=32,
             prompt="",
             max_txt_len=128,
@@ -58,7 +61,7 @@ class Blip2ProteinMistral(Blip2ProteinBase):
         """
         apply_lemmatizer: when set to True, postprocess predict_answers() result with lemmas.
         """
-        super().__init__()
+        super().__init__(config)
         transformers_version = version.parse(transformers.__version__)
         assert transformers_version >= version.parse("4.27"), "BLIP-2 mistral requires transformers>=4.27"
 
@@ -94,19 +97,16 @@ class Blip2ProteinMistral(Blip2ProteinBase):
             layer.intermediate = None
 
         self.mistral_tokenizer = LlamaTokenizer.from_pretrained("/cluster/home/wenkai/.cache/huggingface/hub/models--teknium--OpenHermes-2.5-Mistral-7B", use_fast=False)
+        # configuration = MistralConfig()
+        # self.mistral_tokenizer = LlamaTokenizer.from_pretrained("teknium/OpenHermes-2.5-Mistral-7B")
         self.mistral_tokenizer.pad_token = '<pad>'
-        if get_eval:
-            self.mistral_model = MistralForCausalLM.from_pretrained("/cluster/home/wenkai/.cache/huggingface/hub/models--teknium--OpenHermes-2.5-Mistral-7B", torch_dtype=torch.float16)
-            for name, param in self.mistral_model.named_parameters():
-                param.requires_grad = False
-        else:
-            self.mistral_model = MistralForCausalLM.from_pretrained("/cluster/home/wenkai/.cache/huggingface/hub/models--teknium--OpenHermes-2.5-Mistral-7B", torch_dtype=torch.float16)
-            print(self.mistral_model)
-            for name, param in self.mistral_model.named_parameters():
-                param.requires_grad = False
-            #self.mistral_model.lm_head = self.mistral_model.lm_head.float()
-            #for param in self.mistral_model.lm_head.parameters():
-            #    param.requires_grad = True
+        self.mistral_model = MistralForCausalLM.from_pretrained("/cluster/home/wenkai/.cache/huggingface/hub/models--teknium--OpenHermes-2.5-Mistral-7B", torch_dtype=torch.float16)
+        # self.mistral_model = MistralForCausalLM(configuration)
+        for name, param in self.mistral_model.named_parameters():
+            param.requires_grad = False
+        #self.mistral_model.lm_head = self.mistral_model.lm_head.float()
+        #for param in self.mistral_model.lm_head.parameters():
+        #    param.requires_grad = True
 
         #self.eos_token_id = self.mistral_tokenizer(
         #    "\n", add_special_tokens=False
@@ -126,7 +126,6 @@ class Blip2ProteinMistral(Blip2ProteinBase):
 
         self._apply_lemmatizer = apply_lemmatizer
         self._lemmatizer = None
-        self.get_eval = get_eval
 
     def forward(self, samples):
         '''
@@ -204,58 +203,6 @@ class Blip2ProteinMistral(Blip2ProteinBase):
                 labels=targets,
             )
         loss = outputs.loss
-        if self.get_eval:
-            label = samples["text_input"]
-            name = samples['name']
-            text = samples['prompt']
-            #text = ['' for i in range(len(label))]
-            mistral_tokens = self.mistral_tokenizer(
-                text,
-                return_tensors="pt",
-                padding="longest",
-                truncation=True,
-                max_length=self.max_txt_len,
-            ).to(self.device)
-            #inputs_embeds = self.mistral_model.model.decoder.embed_tokens(mistral_tokens.input_ids)
-            inputs_embeds = self.mistral_model.model.embed_tokens(mistral_tokens.input_ids)
-            inputs_embeds = torch.cat([inputs_mistral, inputs_embeds], dim=1)
-            attention_mask = torch.cat([atts_mistral, mistral_tokens.attention_mask], dim=1)
-            #if name[0] == 'Pin':
-            #    torch.save(inputs_embeds, '/cluster/home/wenkai/LAVIS/output/inputs_embeds.pt')
-            #    torch.save(attention_mask, '/cluster/home/wenkai/LAVIS/output/attention_mask.pt')
-
-            #self.get_eval = False
-            #'''
-            num_txt = 15
-            return_num_txt = 10
-            with torch.no_grad():
-                outputs = self.mistral_model.generate(inputs_embeds=inputs_embeds, attention_mask=attention_mask, min_length=1,
-                                                  max_length=32,temperature=1.,return_dict_in_generate=True, output_scores=True,
-                                                  repetition_penalty=1., num_beams=num_txt,
-                                                  length_penalty=0.2, num_return_sequences=return_num_txt,eos_token_id=self.eos_token_id)
-            output_text = self.mistral_tokenizer.batch_decode(outputs['sequences'], skip_special_tokens=True)
-            '''
-            num_txt = 5
-            return_num_txt = 1
-            with torch.no_grad():
-                outputs = self.mistral_model.generate(inputs_embeds=inputs_embeds, attention_mask=attention_mask, min_length=1,
-                                                  max_length=128,temperature=1.,return_dict_in_generate=True, output_scores=True,
-                                                  repetition_penalty=1., num_beams=num_txt,
-                                                  length_penalty=1, num_return_sequences=return_num_txt,eos_token_id=self.eos_token_id)
-            output_text = self.mistral_tokenizer.batch_decode(outputs['sequences'], skip_special_tokens=True)
-            '''
-            probs = F.softmax(outputs['sequences_scores'])
-            #print(output_text)
-            output_text = [x.replace('\n', '').strip() for x in output_text]
-            
-            output_text_ = []
-            for i in range(len(label)):
-                #output_text_.append(';'.join(output_text[i*return_num_txt:(i+1)*return_num_txt]))
-                output_text_.append(process_text(output_text[i*return_num_txt:(i+1)*return_num_txt], probs[i*return_num_txt:(i+1)*return_num_txt]))
-            #output_text_ = ['; '.join(list(set([i.strip() for i in x.split(';')]))) for x in output_text_]
-            with open('/cluster/home/wenkai/LAVIS/output/mf_bp_cc/output_test_bp_cases_526432.txt', 'a+',  encoding="utf-8") as f:
-                for i in range(len(label)):
-                    f.write(name[i] + "|" +output_text_[i]+"|"+label[i]+'\n')
         return {"loss": loss}
 
     @torch.no_grad()
@@ -268,7 +215,7 @@ class Blip2ProteinMistral(Blip2ProteinBase):
             min_length=1,
             # top_p=0.9,
             repetition_penalty=1.0,
-            length_penalty=1.,
+            length_penalty=0.,
             num_captions=10,
             temperature=1,
     ):
