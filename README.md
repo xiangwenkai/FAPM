@@ -7,6 +7,14 @@
     
 Huggingface repo: *https://huggingface.co/wenkai/FAPM/*  
 
+FAPM Demo: https://huggingface.co/spaces/wenkai/FAPM_demo  
+
+<p align="center">
+    <br>
+    <img src="assets/Demo.png"/>
+    <br>
+<p>  
+
 ## Installation
 
 1. (Optional) Creating conda environment
