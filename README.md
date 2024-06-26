@@ -1,7 +1,7 @@
 ## Introduction
 <p align="center">
     <br>
-    <img src="assets/FAPM.png"/>
+    <img src="assets/FAPM.png" width="70%"/>
     <br>
 <p>  
     
@@ -11,7 +11,7 @@ FAPM Demo: https://huggingface.co/spaces/wenkai/FAPM_demo
 
 <p align="center">
     <br>
-    <img src="assets/Demo.png"/>
+    <img src="assets/Demo.png" width="70%"/>
     <br>
 <p>  
 
