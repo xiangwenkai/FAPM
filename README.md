@@ -11,7 +11,7 @@ FAPM Demo: https://huggingface.co/spaces/wenkai/FAPM_demo
 
 <p align="center">
     <br>
-    <img src="assets/Demo.png" width="75%"/>
+    <img src="assets/Demo.png" width="85%"/>
     <br>
 <p>  
 
