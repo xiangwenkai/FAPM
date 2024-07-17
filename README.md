@@ -5,11 +5,11 @@
     <br>
 <p>  
     
-Dataset DOI: 10.5061/dryad.m905qfv9p
+Dataset DOI: [10.5061/dryad.m905qfv9p](https://doi.org/10.5061/dryad.m905qfv9p)
 
-Huggingface repo: *https://huggingface.co/wenkai/FAPM/*  
+[Huggingface repo](https://huggingface.co/wenkai/FAPM/)
 
-FAPM Demo: https://huggingface.co/spaces/wenkai/FAPM_demo  
+[FAPM Demo](https://huggingface.co/spaces/wenkai/FAPM_demo)
 
 <p align="center">
     <br>
